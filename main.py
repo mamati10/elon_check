@@ -24,13 +24,21 @@ last_profile_image_url = None
 def get_user_data(username):
     url = f"https://api.twitter.com/2/users/by/username/{username}?user.fields=name,profile_image_url"
     headers = {"Authorization": f"Bearer {TWITTER_BEARER_TOKEN}"}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        return data["data"]
-    else:
-        print("❌ خطا در دریافت اطلاعات:", response.text)
+    try:
+        response = requests.get(url, headers=headers, timeout=10)  # تایم‌اوت 10 ثانیه
+        if response.status_code == 200:
+            return response.json()["data"]
+        elif response.status_code == 429:  # محدودیت نرخ
+            print("⚠️ Rate Limit، صبر 15 دقیقه...")
+            time.sleep(900)  # 15 دقیقه صبر
+            return None
+        else:
+            print(f"❌ خطا: {response.status_code} - {response.text}")
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"❌ خطای شبکه: {e}")
         return None
+        
 
 
 def check_changes():
