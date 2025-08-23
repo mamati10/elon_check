@@ -78,5 +78,5 @@ while True:
         print("❌ خطا:", e)
         bot.send_message(CHAT_ID, f"❌ خطا: {e}")
     time.sleep(300) # هر ۶۰ ثانیه یکبار بررسی شود
-#    bot.send_message(CHAT_ID, "ok")
+  bot.send_message(CHAT_ID, "ok")
     
