@@ -9,7 +9,7 @@ keep_alive()  # فعال‌سازی سرور
 
 # ---------- پیکربندی ----------
 TWITTER_BEARER_TOKEN ="AAAAAAAAAAAAAAAAAAAAAK1WzwEAAAAA%2BwakgjDpxEpUok%2Bj1Jgob5q%2FFPs%3DQPeASm2cmVjqFlavd93kKncxhaRl0zPg1B4x0xwuFhjhjL2dYm"
-USERNAME = "Mmd_bit10"  # نام کاربری که می‌خوای بررسی کنی
+USERNAME = "elonmusk"  # نام کاربری که می‌خوای بررسی کنی
 BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"
 CHAT_ID = "804261647"
 
