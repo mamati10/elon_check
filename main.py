@@ -77,6 +77,7 @@ while True:
     except Exception as e:
         print("❌ خطا:", e)
         bot.send_message(CHAT_ID, f"❌ خطا: {e}")
+        bot.send_message(CHAT_ID, "ok")
     time.sleep(300) # هر ۶۰ ثانیه یکبار بررسی شود
-  bot.send_message(CHAT_ID, "ok")
+  
     
