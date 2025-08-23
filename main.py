@@ -8,7 +8,7 @@ keep_alive()  # فعال‌سازی سرور
 
 
 # ---------- پیکربندی ----------
-TWITTER_BEARER_TOKEN ="AAAAAAAAAAAAAAAAAAAAAK1WzwEAAAAAKvDTSt6tOY0XIdRgEdPqYUEhX%2Fo%3DgHoGVXhsIiaE3W8pREpEHRS0IOArjf19idjz062BTuXq0DNFJw"
+TWITTER_BEARER_TOKEN ="AAAAAAAAAAAAAAAAAAAAAK1WzwEAAAAA%2BwakgjDpxEpUok%2Bj1Jgob5q%2FFPs%3DQPeASm2cmVjqFlavd93kKncxhaRl0zPg1B4x0xwuFhjhjL2dYm"
 USERNAME = "Mmd_bit10"  # نام کاربری که می‌خوای بررسی کنی
 BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"
 CHAT_ID = "804261647"
@@ -77,7 +77,7 @@ while True:
     except Exception as e:
         print("❌ خطا:", e)
         bot.send_message(CHAT_ID, f"❌ خطا: {e}")
-        bot.send_message(CHAT_ID, "ok")
+        
     time.sleep(300) # هر ۶۰ ثانیه یکبار بررسی شود
   
     
