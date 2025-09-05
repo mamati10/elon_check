@@ -1,83 +1,23 @@
 import requests
-import telebot
-import time
+from bs4 import BeautifulSoup
 
-from keep_alive import keep_alive
-
-keep_alive()  # فعال‌سازی سرور
-
-
-# ---------- پیکربندی ----------
-TWITTER_BEARER_TOKEN ="AAAAAAAAAAAAAAAAAAAAAK1WzwEAAAAA%2BwakgjDpxEpUok%2Bj1Jgob5q%2FFPs%3DQPeASm2cmVjqFlavd93kKncxhaRl0zPg1B4x0xwuFhjhjL2dYm"
-USERNAME = "Mmd_bit10"  # نام کاربری که می‌خوای بررسی کنی
-BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"
-CHAT_ID = "804261647"
-
-# ---------- راه‌اندازی ربات ----------
-bot = telebot.TeleBot(BOT_TOKEN)
-
-# ---------- ذخیره وضعیت قبلی ----------
-last_name = None
-last_profile_image_url = None
-
-
-def get_user_data(username):
-    url = f"https://api.twitter.com/2/users/by/username/{username}?user.fields=name,profile_image_url"
-    headers = {"Authorization": f"Bearer {TWITTER_BEARER_TOKEN}"}
-    try:
-        response = requests.get(url, headers=headers, timeout=10)  # تایم‌اوت 10 ثانیه
-        if response.status_code == 200:
-            return response.json()["data"]
-        elif response.status_code == 429:  # محدودیت نرخ
-            print("⚠️ Rate Limit، صبر 15 دقیقه...")
-            time.sleep(900)  # 15 دقیقه صبر
-            return None
-        else:
-            print(f"❌ خطا: {response.status_code} - {response.text}")
-            return None
-    except requests.exceptions.RequestException as e:
-        print(f"❌ خطای شبکه: {e}")
-        return None
-        
-
-
-def check_changes():
-    global last_name, last_profile_image_url
-
-    user_data = get_user_data(USERNAME)
-    if user_data is None:
-        bot.send_message(CHAT_ID, "❌ خطا در دریافت اطلاعات کاربر.")
-        return
-
-    current_name = user_data["name"]
-    current_profile_image_url = user_data["profile_image_url"]
-
-    if last_name is None:
-        last_name = current_name
-        last_profile_image_url = current_profile_image_url
-        print("🔎 اولین مقدار ذخیره شد.")
-        return
-
-    if current_name != last_name:
-        msg = f"⚡️ نام تغییر کرد!\nقبلی: {last_name}\nجدید: {current_name}"
-        bot.send_message(CHAT_ID, msg)
-        last_name = current_name
-
-    if current_profile_image_url != last_profile_image_url:
-        msg = "⚡️ عکس پروفایل تغییر کرد!"
-        bot.send_message(CHAT_ID, msg)
-        last_profile_image_url = current_profile_image_url
-
-
-# ---------- حلقه اصلی ----------
-while True:
-    try:
-        print("✅ در حال بررسی تغییرات...")
-        check_changes()
-    except Exception as e:
-        print("❌ خطا:", e)
-        bot.send_message(CHAT_ID, f"❌ خطا: {e}")
-        
-    time.sleep(360) # هر ۶۰ ثانیه یکبار بررسی شود
-  
+def check_display_name(username):
+    url = f"https://x.com/{username}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        return "خطا در دسترسی به صفحه: " + str(response.status_code)
     
+    soup = BeautifulSoup(response.text, 'html.parser')
+    # استخراج نام پروفایل (این سلکتور ممکنه تغییر کنه - بررسی کن)
+    name_tag = soup.find('div', {'data-testid': 'User-Name'})
+    if name_tag:
+        display_name = name_tag.find('span').text.strip()
+        return display_name
+    else:
+        return "نام پروفایل پیدا نشد (ممکنه صفحه تغییر کرده باشه)"
+
+# مثال استفاده
+print(check_display_name("Mmd_bit10"))  # جایگزین با نام کاربری مورد نظر
