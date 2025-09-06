@@ -3,12 +3,13 @@ import telebot
 import time
 from keep_alive import keep_alive
 
-keep_alive()  # فعال‌سازی سرور در Render
+# فعال‌سازی سرور در Render
+keep_alive()
 
 # ---------- پیکربندی ----------
 USERNAME = "Mmd_bit10"   # نام کاربری که می‌خوای بررسی کنی
-BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"
-CHAT_ID = "804261647"
+BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"  # توکن ربات تلگرام
+CHAT_ID = "804261647"    # آیدی چت تلگرام
 
 # ---------- راه‌اندازی ربات ----------
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -19,13 +20,17 @@ last_profile_image_url = None
 
 def get_user_data(username):
     try:
+        # گرفتن اطلاعات کاربر با snscrape
         user = next(sntwitter.TwitterUserScraper(username).get_items())
         return {
             "name": user.user.displayname,
             "profile_image_url": user.user.profileImageUrl
         }
+    except StopIteration:
+        print("❌ کاربر پیدا نشد.")
+        return None
     except Exception as e:
-        print("❌ خطا در گرفتن اطلاعات:", e)
+        print(f"❌ خطا در گرفتن اطلاعات: {e}")
         return None
 
 def check_changes():
@@ -56,11 +61,12 @@ def check_changes():
         last_profile_image_url = current_profile_image_url
 
 # ---------- حلقه اصلی ----------
-while True:
-    try:
-        print("✅ در حال بررسی تغییرات...")
-        check_changes()
-    except Exception as e:
-        print("❌ خطا:", e)
-        bot.send_message(CHAT_ID, f"❌ خطا: {e}")
-    time.sleep(300)  # هر ۵ دقیقه بررسی شود
+if __name__ == "__main__":
+    while True:
+        try:
+            print("✅ در حال بررسی تغییرات...")
+            check_changes()
+        except Exception as e:
+            print(f"❌ خطا: {e}")
+            bot.send_message(CHAT_ID, f"❌ خطا: {e}")
+        time.sleep(300)  # هر ۵ دقیقه بررسی شود
