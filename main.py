@@ -1,4 +1,9 @@
+from keep_alive import keep_alive
 from playwright.sync_api import sync_playwright
+import time
+
+# فعال نگه داشتن سرویس با Flask
+keep_alive()
 
 def check_display_name(username):
     with sync_playwright() as p:
@@ -14,8 +19,10 @@ def check_display_name(username):
             browser.close()
             return f"خطا: {str(e)}"
 
-# مثال استفاده - می‌تونی اینو با نیازت تغییر بدی
+# مثال استفاده - می‌تونی این بخش رو با نیازت تغییر بدی
 if __name__ == "__main__":
-    username = "Mmd_bit10"  # اسم کاربری که می‌خوای چک کنی
-    result = check_display_name(username)
-    print(f"نام پروفایل: {result}")
+    usernames = ["Mmd_bit10", "example_user"]  # لیست اسم‌های کاربری که می‌خوای چک کنی
+    for username in usernames:
+        result = check_display_name(username)
+        print(f"نام پروفایل برای {username}: {result}")
+        time.sleep(5)  # تأخیر 5 ثانیه برای جلوگیری از بلاک شدن
