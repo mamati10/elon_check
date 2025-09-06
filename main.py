@@ -80,4 +80,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"❌ خطا: {e}")
             bot.send_message(CHAT_ID, f"❌ خطا: {e}")
-        time.sleep(600)  # هر ۱۰ دقیقه بررسی شود (برای جلوگیری از بلاک)
+        time.sleep(600)  # هر ۱۰ دقیقه بررسی شود
