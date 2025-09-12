@@ -7,6 +7,7 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # این نصب کرومیوم و وابستگی‌ها رو همزمان انجام میده
-RUN playwright install chromium
+RUN playwright install --with-deps
+
 
 CMD ["python", "main.py"]
