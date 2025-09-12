@@ -12,7 +12,7 @@ COPY . /app
 # نصب پکیج‌های پایتون
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN playwright install --with-deps
+
 
 # اجرای برنامه
 CMD ["python", "main.py"]
