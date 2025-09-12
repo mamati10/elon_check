@@ -1,15 +1,15 @@
-from keep_alive import keep_alive
-from playwright.sync_api import sync_playwright
+import snscrape.modules.twitter as sntwitter
 import telebot
 import time
+from keep_alive import keep_alive
 
 # فعال‌سازی سرور در Render
 keep_alive()
 
 # ---------- پیکربندی ----------
-USERNAME = "Mmd_bit10"   # نام کاربری که می‌خوای بررسی کنی
-BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"
-CHAT_ID = "804261647"
+USERNAME = "Mmd_bit10"   # نام کاربری که می‌خوای بررسی کنی (مثلاً "elonmusk" برای ایلان ماسک)
+BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"  # توکن ربات تلگرام
+CHAT_ID = "804261647"    # آیدی چت تلگرام
 
 # ---------- راه‌اندازی ربات ----------
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -20,28 +20,17 @@ last_profile_image_url = None
 
 def get_user_data(username):
     try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True, args=['--disable-blink-features=AutomationControlled'])
-            page = browser.new_page(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-                extra_http_headers={
-                    "Accept-Language": "en-US,en;q=0.9",
-                    "Referer": "https://x.com"
-                }
-            )
-            page.goto(f"https://x.com/{username}", timeout=60000)
-            page.wait_for_selector('[data-testid="User-Name"]', state="visible", timeout=30000)
-            display_name = page.query_selector('[data-testid="User-Name"] span').inner_text().strip()
-            profile_image = page.query_selector('div.css-1dbjc4n img')
-            profile_image_url = profile_image.get_attribute('src') if profile_image else "عکس پیدا نشد"
-            browser.close()
-            return {
-                "name": display_name,
-                "profile_image_url": profile_image_url
-            }
+        # گرفتن اطلاعات کاربر با snscrape
+        user = next(sntwitter.TwitterUserScraper(username).get_items())
+        return {
+            "name": user.user.displayname,
+            "profile_image_url": user.user.profileImageUrl
+        }
+    except StopIteration:
+        print("❌ کاربر پیدا نشد.")
+        return None
     except Exception as e:
         print(f"❌ خطا در گرفتن اطلاعات: {e}")
-        bot.send_message(CHAT_ID, f"❌ جزئیات خطا: {str(e)}")
         return None
 
 def check_changes():
@@ -80,4 +69,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"❌ خطا: {e}")
             bot.send_message(CHAT_ID, f"❌ خطا: {e}")
-        time.sleep(600)  # هر ۱۰ دقیقه بررسی شود
+        time.sleep(3600)  # هر ۵ دقیقه بررسی شود (می‌تونی به 60 تغییر بدی برای دقیقه‌ای)
