@@ -7,7 +7,7 @@ from keep_alive import keep_alive
 keep_alive()
 
 # ---------- پیکربندی ----------
-USERNAME = "Mmd_bit10"   # نام کاربری که می‌خوای بررسی کنی (مثلاً "elonmusk" برای ایلان ماسک)
+USERNAME = "Mmd_bit10"   # نام کاربری که می‌خوای بررسی کنی
 BOT_TOKEN = "8192088890:AAG9cR7Z4FbX0c1qV8aCUNkUo6jQEFpljRQ"  # توکن ربات تلگرام
 CHAT_ID = "804261647"    # آیدی چت تلگرام
 
@@ -20,7 +20,6 @@ last_profile_image_url = None
 
 def get_user_data(username):
     try:
-        # گرفتن اطلاعات کاربر با snscrape
         user = next(sntwitter.TwitterUserScraper(username).get_items())
         return {
             "name": user.user.displayname,
@@ -69,4 +68,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"❌ خطا: {e}")
             bot.send_message(CHAT_ID, f"❌ خطا: {e}")
-        time.sleep(3600)  # هر ۵ دقیقه بررسی شود (می‌تونی به 60 تغییر بدی برای دقیقه‌ای)
+        time.sleep(600)  # هر ۱ دقیقه بررسی شود
